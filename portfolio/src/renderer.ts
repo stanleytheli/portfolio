@@ -24,7 +24,7 @@ export class SimulationRenderer {
     if (z <= 1) return null;
 
     const scale = this.z0 / z;
-    const cx = this.canvas.width / 2;
+    const cx = this.canvas.width / 3;  // Star positioned 1/3 from left
     const cy = this.canvas.height / 2;
 
     // x, y are relative to center; scale them by perspective

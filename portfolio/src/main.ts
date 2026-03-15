@@ -32,6 +32,25 @@ controls.innerHTML = `
 `;
 document.body.appendChild(controls);
 
+// Create toggle button for controls
+controls.className = 'controls hidden';
+const toggleBtn = document.createElement('button');
+toggleBtn.className = 'controls-toggle';
+toggleBtn.textContent = '⚙';
+toggleBtn.addEventListener('click', () => {
+  controls.classList.toggle('hidden');
+});
+document.body.appendChild(toggleBtn);
+
+// Create text content
+const content = document.createElement('div');
+content.className = 'content';
+content.innerHTML = `
+  <h1 class="name">Stanley Li</h1>
+  <p class="blurb">Looking for something inevitable, like gravity.</p>
+`;
+document.body.appendChild(content);
+
 const z0Slider = document.getElementById('z0-slider') as HTMLInputElement;
 const nSlider = document.getElementById('n-slider') as HTMLInputElement;
 const z0Value = document.getElementById('z0-value') as HTMLSpanElement;

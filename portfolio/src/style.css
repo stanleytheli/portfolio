@@ -18,13 +18,38 @@ body {
   height: 100vh;
 }
 
+/* Text content on the right */
+.content {
+  position: fixed;
+  top: 50%;
+  right: 10%;
+  transform: translateY(-50%);
+  z-index: 10;
+  text-align: left;
+}
+
+.name {
+  color: #ffffff;
+  font-size: 4rem;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+}
+
+.blurb {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+/* Controls in bottom left */
 .controls {
   position: fixed;
   bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 60px;
   display: flex;
-  gap: 48px;
+  flex-direction: column;
+  gap: 16px;
   z-index: 10;
 }
 
@@ -64,4 +89,29 @@ body {
   width: 100px;
   accent-color: #ffffff;
   cursor: pointer;
+}
+
+.controls.hidden {
+  display: none;
+}
+
+/* Toggle button */
+.controls-toggle {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 11;
+  transition: background 0.15s;
+}
+
+.controls-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
