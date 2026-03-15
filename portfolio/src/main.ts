@@ -24,7 +24,7 @@ controls.innerHTML = `
     <span class="slider-title">N</span>
     <div class="slider-row">
       <span class="slider-label">5</span>
-      <input type="range" id="n-slider" min="5" max="100" value="20">
+      <input type="range" id="n-slider" min="5" max="100" value="35">
       <span class="slider-label">100</span>
     </div>
     <span class="slider-value" id="n-value">20</span>
@@ -47,7 +47,7 @@ const content = document.createElement('div');
 content.className = 'content';
 content.innerHTML = `
   <h1 class="name">Stanley Li</h1>
-  <p class="blurb">Looking for something inevitable, like gravity.</p>
+  <p class="blurb">My little corner of the galaxy.</p>
 `;
 document.body.appendChild(content);
 
@@ -102,7 +102,7 @@ function spawnBodies(n: number) {
 }
 
 // Initial spawn
-spawnBodies(20);
+spawnBodies(35);
 
 // Update FOV helper
 function setFOV(value: number) {
