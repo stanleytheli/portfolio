@@ -119,6 +119,39 @@ canvas.addEventListener('mouseleave', () => {
   arcball.endDrag();
 });
 
+// Touch event handlers for arcball camera control (mobile/touchscreen)
+canvas.addEventListener('touchstart', (e) => {
+  if (e.touches.length !== 1) return; // Single finger only
+  
+  const touch = e.touches[0];
+  const isMobile = window.innerWidth <= 640;
+  const gravityAreaWidth = isMobile ? window.innerWidth : window.innerWidth * 0.55;
+  
+  if (touch.clientX <= gravityAreaWidth) {
+    e.preventDefault(); // Prevent scrolling while dragging
+    arcball.startDrag(touch.clientX, touch.clientY);
+  }
+}, { passive: false });
+
+canvas.addEventListener('touchmove', (e) => {
+  if (e.touches.length !== 1) return;
+  
+  if (arcball.isDragging()) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    arcball.drag(touch.clientX, touch.clientY);
+    renderer.cameraRotation = arcball.rotation;
+  }
+}, { passive: false });
+
+canvas.addEventListener('touchend', () => {
+  arcball.endDrag();
+});
+
+canvas.addEventListener('touchcancel', () => {
+  arcball.endDrag();
+});
+
 resize();
 window.addEventListener('resize', resize);
 
