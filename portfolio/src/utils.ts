@@ -1,5 +1,10 @@
 // Random number utilities
 
+/** Exponential distribution with mean 1/lambda */
+export function randExp(lambda: number): number {
+    return -Math.log(1 - Math.random()) / lambda;
+}
+
 /** Uniform random in [min, max) */
 export function randUniform(min: number, max: number): number {
   return min + Math.random() * (max - min);

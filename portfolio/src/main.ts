@@ -1,7 +1,7 @@
 import './style.css';
 import { GravitySimulation, Vec3 } from './gravity';
 import { SimulationRenderer } from './renderer';
-import { randUniform, randNormal, randLognormal } from './utils';
+import { randExp, randUniform, randNormal, randLognormal } from './utils';
 import { initPortfolio } from './portfolio';
 
 // Create fullscreen canvas
@@ -26,10 +26,10 @@ controls.innerHTML = `
     <span class="slider-title">N</span>
     <div class="slider-row">
       <span class="slider-label">5</span>
-      <input type="range" id="n-slider" min="5" max="100" value="35">
-      <span class="slider-label">100</span>
+      <input type="range" id="n-slider" min="5" max="200" value="75">
+      <span class="slider-label">200</span>
     </div>
-    <span class="slider-value" id="n-value">35</span>
+    <span class="slider-value" id="n-value">75</span>
   </div>
 `;
 document.body.appendChild(controls);
@@ -94,7 +94,7 @@ function spawnBodies(n: number) {
   renderer.sim = sim;
 
   // Central massive body (star)
-  const starMass = 2500
+  const starMass = 5000
   sim.createBody(0, 0, 500, 0, 0, 0, starMass, false, 15);
 
   // Spawn orbiting bodies
@@ -143,13 +143,14 @@ function spawnBodies(n: number) {
     const vz = vzf + randNormal(0, 0.1 * v)
 
     const mass = randLognormal(2.5, 0.7) 
+    //const mass = randExp(0.0667)
     sim.createBody(x, y, z, vx, vy, vz, mass);
     
   }
 }
 
 // Initial spawn
-spawnBodies(35);
+spawnBodies(75);
 
 // Update FOV helper
 function setFOV(value: number) {
