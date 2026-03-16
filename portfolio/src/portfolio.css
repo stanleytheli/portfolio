@@ -312,3 +312,30 @@
 .project-title a:hover {
   color: #ffffff;
 }
+
+/* Mobile responsive */
+@media (max-width: 640px) {
+  .portfolio {
+    position: relative;
+    width: 100%;
+    height: auto;
+    margin-top: 50vh;
+  }
+
+  .portfolio-header {
+    height: 50vh;
+  }
+
+  .portfolio-inner {
+    min-height: auto;
+    padding: 0 5% 5vh 5%;
+  }
+
+  .portfolio-name {
+    font-size: 2.5rem;
+  }
+
+  .portfolio-blurb {
+    font-size: 1rem;
+  }
+}

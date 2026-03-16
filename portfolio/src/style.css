@@ -91,3 +91,27 @@ body {
 .controls-toggle:hover {
   background: rgba(255, 255, 255, 0.2);
 }
+
+/* Mobile responsive */
+@media (max-width: 640px) {
+  body {
+    overflow: auto;
+  }
+
+  #simulation {
+    position: fixed;
+    height: 50vh;
+    width: 100vw;
+    transition: opacity 0.3s ease;
+  }
+
+  #simulation.faded {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .controls,
+  .controls-toggle {
+    display: none;
+  }
+}

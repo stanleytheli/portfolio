@@ -135,12 +135,27 @@ export function initPortfolio(): void {
   // Scroll reveal functionality
   const sections = content.querySelector('.portfolio-sections') as HTMLElement;
   const scrollHint = content.querySelector('.scroll-hint') as HTMLElement;
+  const isMobile = () => window.innerWidth <= 640;
 
+  // Desktop: portfolio element scrolls
   content.addEventListener('scroll', () => {
+    if (isMobile()) return;
     const scrollTop = content.scrollTop;
     
-    // Reveal sections when scrolled
     if (scrollTop > 20) {
+      sections.classList.add('revealed');
+      scrollHint.classList.add('hidden');
+    } else {
+      sections.classList.remove('revealed');
+      scrollHint.classList.remove('hidden');
+    }
+  });
+
+  // Mobile: window scrolls
+  window.addEventListener('scroll', () => {
+    if (!isMobile()) return;
+    
+    if (window.scrollY > 20) {
       sections.classList.add('revealed');
       scrollHint.classList.add('hidden');
     } else {
@@ -161,4 +176,19 @@ export function initPortfolio(): void {
       }
     });
   });
+
+  // Mobile: fade canvas on scroll
+  const canvas = document.getElementById('simulation');
+
+  if (canvas) {
+    window.addEventListener('scroll', () => {
+      if (isMobile()) {
+        if (window.scrollY > 50) {
+          canvas.classList.add('faded');
+        } else {
+          canvas.classList.remove('faded');
+        }
+      }
+    });
+  }
 }
