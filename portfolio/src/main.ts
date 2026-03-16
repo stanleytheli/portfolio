@@ -47,8 +47,60 @@ document.body.appendChild(toggleBtn);
 const content = document.createElement('div');
 content.className = 'content';
 content.innerHTML = `
-  <h1 class="name">Stanley Li</h1>
-  <p class="blurb">My little corner of the galaxy.</p>
+  <div class="content-inner">
+    <header class="header">
+      <h1 class="name">Stanley Li</h1>
+      <p class="blurb">My little corner of the galaxy.</p>
+    </header>
+
+    <section class="section">
+      <h2 class="section-title">Projects</h2>
+      
+      <article class="project">
+        <h3 class="project-title">Gravity Simulation</h3>
+        <p class="project-desc">An N-body gravitational simulation running in your browser. Real physics, not just animation.</p>
+        <div class="project-tags">
+          <span class="tag">TypeScript</span>
+          <span class="tag">Canvas</span>
+          <span class="tag">Physics</span>
+        </div>
+      </article>
+
+      <article class="project">
+        <h3 class="project-title">Project Two</h3>
+        <p class="project-desc">A brief description of another interesting project you've worked on.</p>
+        <div class="project-tags">
+          <span class="tag">Python</span>
+          <span class="tag">Machine Learning</span>
+        </div>
+      </article>
+
+      <article class="project">
+        <h3 class="project-title">Project Three</h3>
+        <p class="project-desc">Yet another project showcasing different skills and technologies.</p>
+        <div class="project-tags">
+          <span class="tag">React</span>
+          <span class="tag">Node.js</span>
+        </div>
+      </article>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">About</h2>
+      <p class="about-text">
+        A few words about yourself, your interests, and what drives you to build things.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Contact</h2>
+      <div class="links">
+        <a href="https://github.com" class="link">GitHub</a>
+        <a href="https://linkedin.com" class="link">LinkedIn</a>
+        <a href="mailto:email@example.com" class="link">Email</a>
+      </div>
+    </section>
+  </div>
 `;
 document.body.appendChild(content);
 
@@ -78,7 +130,7 @@ function spawnBodies(n: number) {
   renderer.sim = sim;
 
   // Central massive body (star)
-  const starMass = 250
+  const starMass = 2500
   sim.createBody(0, 0, 500, 0, 0, 0, starMass, false, 15);
 
   // Spawn orbiting bodies
@@ -102,7 +154,7 @@ function spawnBodies(n: number) {
     */
 
     // Orbital plane unit vector.
-    const orbital_plane = new Vec3(1, 1, 1).normalize();
+    const orbital_plane = new Vec3(1, -1, -1).normalize();
     
     const r_hat = orbital_plane.randomPerpendicular();
     const r = randUniform(150, 400);
@@ -119,12 +171,12 @@ function spawnBodies(n: number) {
     const vzf = v * v_hat.z;
 
     // Add some noise to the position and velocity
-    const x = xf + randNormal(0, 0.05 * r)
-    const y = yf + randNormal(0, 0.05 * r)
-    const z = zf + randNormal(0, 0.05 * r)
-    const vx = vxf + randNormal(0, 0.05 * v)
-    const vy = vyf + randNormal(0, 0.05 * v)
-    const vz = vzf + randNormal(0, 0.05 * v)
+    const x = xf + randNormal(0, 0.1 * r)
+    const y = yf + randNormal(0, 0.1 * r)
+    const z = zf + randNormal(0, 0.1 * r)
+    const vx = vxf + randNormal(0, 0.1 * v)
+    const vy = vyf + randNormal(0, 0.1 * v)
+    const vz = vzf + randNormal(0, 0.1 * v)
 
     const mass = randLognormal(2.5, 0.7) 
     sim.createBody(x, y, z, vx, vy, vz, mass);
