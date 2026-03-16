@@ -30,6 +30,8 @@ export function initPortfolio(): void {
               <br><br>
               Links:
               <br>
+              <a href="/resume.pdf" class="link" target="_blank">Resume</a>
+              <br>
               <a href="https://github.com/stanleytheli" class="link">GitHub</a>
               <br>
               <a href="https://linkedin.com/in/stanleytheli" class="link">LinkedIn</a>
@@ -122,6 +124,7 @@ export function initPortfolio(): void {
           <h2 class="section-title"><span class="section-toggle">−</span>Links</h2>
           <div class="section-content">
             <div class="links">
+              <a href="/resume.pdf" class="link" target="_blank">Resume</a>
               <a href="https://github.com/stanleytheli" class="link">GitHub</a>
               <a href="https://linkedin.com/in/stanleytheli" class="link">LinkedIn</a>
             </div>
