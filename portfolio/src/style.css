@@ -92,6 +92,32 @@ body {
   background: rgba(255, 255, 255, 0.2);
 }
 
+/* Simulation toggle button */
+.sim-toggle {
+  position: fixed;
+  bottom: 60px;
+  left: 24px;
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 11;
+  transition: background 0.15s;
+}
+
+.sim-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Hidden simulation */
+#simulation.hidden {
+  display: none;
+}
+
 /* Mobile responsive */
 @media (max-width: 640px) {
   body {
@@ -113,7 +139,8 @@ body {
   }
 
   .controls,
-  .controls-toggle {
+  .controls-toggle,
+  .sim-toggle {
     display: none;
   }
 }

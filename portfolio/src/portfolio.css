@@ -9,6 +9,19 @@
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  transition: width 0.3s ease, right 0.3s ease;
+}
+
+/* Centered mode (when simulation is hidden) */
+.portfolio.centered {
+  width: 100%;
+  right: 0;
+}
+
+.portfolio.centered .portfolio-inner {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 5% 10vh 5%;
 }
 
 .portfolio::-webkit-scrollbar {

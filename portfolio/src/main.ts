@@ -44,6 +44,27 @@ toggleBtn.addEventListener('click', () => {
 });
 document.body.appendChild(toggleBtn);
 
+// Create toggle button for simulation visibility
+const simToggleBtn = document.createElement('button');
+simToggleBtn.className = 'sim-toggle';
+simToggleBtn.textContent = '←';
+simToggleBtn.addEventListener('click', () => {
+  const portfolio = document.querySelector('.portfolio');
+  const isHidden = canvas.classList.toggle('hidden');
+  controls.classList.add('hidden');
+  
+  if (isHidden) {
+    simToggleBtn.textContent = '→';
+    portfolio?.classList.add('centered');
+    toggleBtn.style.display = 'none';
+  } else {
+    simToggleBtn.textContent = '←';
+    portfolio?.classList.remove('centered');
+    toggleBtn.style.display = '';
+  }
+});
+document.body.appendChild(simToggleBtn);
+
 // Initialize portfolio
 initPortfolio();
 
