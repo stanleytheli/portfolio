@@ -14,7 +14,7 @@ export function initPortfolio(): void {
 
       <div class="portfolio-sections">
         <section class="portfolio-section">
-          <h2 class="section-title"><span class="section-toggle">+</span> About</h2>
+          <h2 class="section-title"><span class="section-toggle">−</span> About</h2>
           <div class="section-content">
             <p class="about-text">
               Hello! My name's Stanley Li. I'm currently studying Math and CS at UC Berkeley.
