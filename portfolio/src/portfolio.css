@@ -1,0 +1,177 @@
+/* Portfolio panel on the right */
+.portfolio {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 45%;
+  height: 100vh;
+  z-index: 10;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.portfolio::-webkit-scrollbar {
+  width: 6px;
+}
+
+.portfolio::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.portfolio::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.portfolio-inner {
+  padding: 0 10% 10vh 5%;
+  min-height: 200vh; /* Extra space to allow scrolling */
+}
+
+/* Header - always visible, centered initially */
+.portfolio-header {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+.portfolio-name {
+  color: #ffffff;
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 3.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+}
+
+.portfolio-blurb {
+  color: rgba(255, 255, 255, 0.5);
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+/* Scroll hint */
+.scroll-hint {
+  position: absolute;
+  bottom: 3rem;
+  left: 0;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 1.5rem;
+  animation: bounce 2s infinite;
+  transition: opacity 0.3s;
+}
+
+.scroll-hint.hidden {
+  opacity: 0;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(8px);
+  }
+  60% {
+    transform: translateY(4px);
+  }
+}
+
+/* Sections - hidden by default */
+.portfolio-sections {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  padding-bottom: 4rem;
+}
+
+.portfolio-sections.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.portfolio-section {
+  margin-bottom: 3rem;
+}
+
+.section-title {
+  color: rgba(255, 255, 255, 0.4);
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1.5rem;
+}
+
+/* Projects */
+.project {
+  margin-bottom: 2rem;
+  padding: 1.25rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.project:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.project-title {
+  color: #ffffff;
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.project-desc {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.7rem;
+  padding: 0.25rem 0.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+}
+
+/* About */
+.about-text {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+/* Links */
+.links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.link {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.link:hover {
+  color: #ffffff;
+}

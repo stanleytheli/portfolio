@@ -2,6 +2,7 @@ import './style.css';
 import { GravitySimulation, Vec3 } from './gravity';
 import { SimulationRenderer } from './renderer';
 import { randUniform, randNormal, randLognormal } from './utils';
+import { initPortfolio } from './portfolio';
 
 // Create fullscreen canvas
 const canvas = document.createElement('canvas');
@@ -43,66 +44,8 @@ toggleBtn.addEventListener('click', () => {
 });
 document.body.appendChild(toggleBtn);
 
-// Create text content
-const content = document.createElement('div');
-content.className = 'content';
-content.innerHTML = `
-  <div class="content-inner">
-    <header class="header">
-      <h1 class="name">Stanley Li</h1>
-      <p class="blurb">My little corner of the galaxy.</p>
-    </header>
-
-    <section class="section">
-      <h2 class="section-title">Projects</h2>
-      
-      <article class="project">
-        <h3 class="project-title">Gravity Simulation</h3>
-        <p class="project-desc">An N-body gravitational simulation running in your browser. Real physics, not just animation.</p>
-        <div class="project-tags">
-          <span class="tag">TypeScript</span>
-          <span class="tag">Canvas</span>
-          <span class="tag">Physics</span>
-        </div>
-      </article>
-
-      <article class="project">
-        <h3 class="project-title">Project Two</h3>
-        <p class="project-desc">A brief description of another interesting project you've worked on.</p>
-        <div class="project-tags">
-          <span class="tag">Python</span>
-          <span class="tag">Machine Learning</span>
-        </div>
-      </article>
-
-      <article class="project">
-        <h3 class="project-title">Project Three</h3>
-        <p class="project-desc">Yet another project showcasing different skills and technologies.</p>
-        <div class="project-tags">
-          <span class="tag">React</span>
-          <span class="tag">Node.js</span>
-        </div>
-      </article>
-    </section>
-
-    <section class="section">
-      <h2 class="section-title">About</h2>
-      <p class="about-text">
-        A few words about yourself, your interests, and what drives you to build things.
-      </p>
-    </section>
-
-    <section class="section">
-      <h2 class="section-title">Contact</h2>
-      <div class="links">
-        <a href="https://github.com" class="link">GitHub</a>
-        <a href="https://linkedin.com" class="link">LinkedIn</a>
-        <a href="mailto:email@example.com" class="link">Email</a>
-      </div>
-    </section>
-  </div>
-`;
-document.body.appendChild(content);
+// Initialize portfolio
+initPortfolio();
 
 const z0Slider = document.getElementById('z0-slider') as HTMLInputElement;
 const nSlider = document.getElementById('n-slider') as HTMLInputElement;
