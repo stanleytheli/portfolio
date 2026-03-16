@@ -37,8 +37,8 @@ export function initPortfolio(): void {
           </div>
         </section>
 
-        <section class="portfolio-section collapsed">
-          <h2 class="section-title"><span class="section-toggle">+</span> Experience</h2>
+        <section class="portfolio-section">
+          <h2 class="section-title"><span class="section-toggle">−</span> Experience</h2>
           <div class="section-content">
             <article class="experience">
               <div class="experience-header">
@@ -92,8 +92,8 @@ export function initPortfolio(): void {
           </div>
         </section>
 
-        <section class="portfolio-section collapsed">
-          <h2 class="section-title"><span class="section-toggle">+</span> Projects</h2>
+        <section class="portfolio-section">
+          <h2 class="section-title"><span class="section-toggle">−</span> Projects</h2>
           <div class="section-content">
             <article class="project">
               <h3 class="project-title"><a href="https://github.com/stanleytheli/cubegpt">CubeGPT</a></h3>
@@ -118,8 +118,8 @@ export function initPortfolio(): void {
         </section>
 
 
-        <section class="portfolio-section collapsed">
-          <h2 class="section-title"><span class="section-toggle">+</span>Links</h2>
+        <section class="portfolio-section">
+          <h2 class="section-title"><span class="section-toggle">−</span>Links</h2>
           <div class="section-content">
             <div class="links">
               <a href="https://github.com/stanleytheli" class="link">GitHub</a>
