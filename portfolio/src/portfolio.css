@@ -58,11 +58,23 @@
 .scroll-hint {
   position: absolute;
   bottom: 3rem;
-  left: 0;
-  color: rgba(255, 255, 255, 0.3);
-  font-size: 1.5rem;
-  animation: bounce 2s infinite;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   transition: opacity 0.3s;
+}
+
+.scroll-arrow {
+  font-size: 1.2rem;
+  animation: bounce 2s infinite;
 }
 
 .scroll-hint.hidden {
@@ -74,10 +86,10 @@
     transform: translateY(0);
   }
   40% {
-    transform: translateY(8px);
+    transform: translateY(6px);
   }
   60% {
-    transform: translateY(4px);
+    transform: translateY(3px);
   }
 }
 

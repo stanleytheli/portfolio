@@ -8,7 +8,7 @@ export function initPortfolio(): void {
       <header class="portfolio-header">
         <h1 class="portfolio-name">Stanley Li</h1>
         <p class="portfolio-blurb">My little corner of the galaxy.</p>
-        <div class="scroll-hint">↓</div>
+        <div class="scroll-hint">Scroll<span class="scroll-arrow">↓</span></div>
       </header>
 
       <div class="portfolio-sections">
