@@ -1,7 +1,7 @@
 import './style.css';
 import { GravitySimulation, Vec3 } from './gravity';
 import { SimulationRenderer } from './renderer';
-import { randExp, randUniform, randNormal, randLognormal } from './utils';
+import { randUniform, randNormal, randLognormal } from './utils';
 import { initPortfolio } from './portfolio';
 
 // Create fullscreen canvas
