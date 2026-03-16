@@ -84,7 +84,7 @@ export function initPortfolio(): void {
                 <div class="experience-info">
                   <h3 class="experience-title">Tutor</h3>
                   <span class="experience-company">UC Berkeley</span>
-                  <span class="experience-date">May 2024 - August 2025</span>
+                  <span class="experience-date">May 2025 - August 2025</span>
                 </div>
               </div>
               <p class="experience-desc">Course staff for CS 61B (Data Structures & Algorithms) here at UC Berkeley.</p>
