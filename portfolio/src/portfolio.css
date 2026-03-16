@@ -320,10 +320,12 @@
     width: 100%;
     height: auto;
     margin-top: 50vh;
+    background: transparent;
   }
 
   .portfolio-header {
     height: 50vh;
+    background: transparent;
   }
 
   .portfolio-inner {
@@ -337,5 +339,9 @@
 
   .portfolio-blurb {
     font-size: 1rem;
+  }
+
+  .portfolio-sections {
+    background: #000000;
   }
 }

@@ -100,7 +100,9 @@ body {
 
   #simulation {
     position: fixed;
-    height: 50vh;
+    top: 0;
+    left: 0;
+    height: 100vh;
     width: 100vw;
     transition: opacity 0.3s ease;
   }

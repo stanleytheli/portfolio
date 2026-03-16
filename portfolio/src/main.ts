@@ -54,9 +54,8 @@ const nValue = document.getElementById('n-value') as HTMLSpanElement;
 
 // Sizing
 function resize() {
-  const isMobile = window.innerWidth <= 640;
   canvas.width = window.innerWidth;
-  canvas.height = isMobile ? window.innerHeight * 0.5 : window.innerHeight;
+  canvas.height = window.innerHeight;
 }
 resize();
 window.addEventListener('resize', resize);
