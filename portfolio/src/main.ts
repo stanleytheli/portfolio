@@ -1,6 +1,7 @@
 import './style.css';
-import { GravitySimulation } from './gravity';
+import { GravitySimulation, Vec3 } from './gravity';
 import { SimulationRenderer } from './renderer';
+import { randUniform, randNormal, randLognormal } from './utils';
 
 // Create fullscreen canvas
 const canvas = document.createElement('canvas');
@@ -27,7 +28,7 @@ controls.innerHTML = `
       <input type="range" id="n-slider" min="5" max="100" value="35">
       <span class="slider-label">100</span>
     </div>
-    <span class="slider-value" id="n-value">20</span>
+    <span class="slider-value" id="n-value">35</span>
   </div>
 `;
 document.body.appendChild(controls);
@@ -68,21 +69,22 @@ window.addEventListener('resize', resize);
 let sim = new GravitySimulation();
 const renderer = new SimulationRenderer(canvas, sim, 400);
 
-// Spawn bodies helper
-function randomRange(min: number, max: number): number {
-  return min + Math.random() * (max - min);
-}
+
+
+
 
 function spawnBodies(n: number) {
   sim = new GravitySimulation();
   renderer.sim = sim;
 
   // Central massive body (star)
-  sim.createBody(0, 0, 500, 0, 0, 0, 500, false, 15);
+  const starMass = 250
+  sim.createBody(0, 0, 500, 0, 0, 0, starMass, false, 15);
 
   // Spawn orbiting bodies
   for (let i = 0; i < n; i++) {
-    const distance = randomRange(80, 300);
+    /*
+    const distance = randUniform(80, 300);
     const theta = Math.random() * Math.PI * 2;
     const phi = (Math.random() - 0.5) * Math.PI * 0.6;
 
@@ -90,14 +92,43 @@ function spawnBodies(n: number) {
     const y = distance * Math.sin(theta) * Math.cos(phi);
     const z = 500 + distance * Math.sin(phi);
 
-    const orbitalSpeed = Math.sqrt((sim.G * 500) / distance) * 0.8;
+    const orbitalSpeed = Math.sqrt((sim.G * 500) / distance) * randUniform(0.4, 1.2);
 
     const vx = -Math.sin(theta) * orbitalSpeed;
     const vy = Math.cos(theta) * orbitalSpeed;
-    const vz = randomRange(-0.2, 0.2) * orbitalSpeed;
+    const vz = randUniform(-0.2, 0.2) * orbitalSpeed;
 
-    const mass = randomRange(5, 30);
+    const mass = randUniform(5, 30);
+    */
+
+    // Orbital plane unit vector.
+    const orbital_plane = new Vec3(1, 1, 1).normalize();
+    
+    const r_hat = orbital_plane.randomPerpendicular();
+    const r = randUniform(150, 400);
+
+    const v_hat = orbital_plane.cross(r_hat);
+    const v = Math.sqrt((sim.G * starMass) / r) * randNormal(1.00, 0.05)
+
+    const xf = r * r_hat.x;
+    const yf = r * r_hat.y;
+    const zf = 500 + r * r_hat.z;
+
+    const vxf = v * v_hat.x;
+    const vyf = v * v_hat.y;
+    const vzf = v * v_hat.z;
+
+    // Add some noise to the position and velocity
+    const x = xf + randNormal(0, 0.05 * r)
+    const y = yf + randNormal(0, 0.05 * r)
+    const z = zf + randNormal(0, 0.05 * r)
+    const vx = vxf + randNormal(0, 0.05 * v)
+    const vy = vyf + randNormal(0, 0.05 * v)
+    const vz = vzf + randNormal(0, 0.05 * v)
+
+    const mass = randLognormal(2.5, 0.7) 
     sim.createBody(x, y, z, vx, vy, vz, mass);
+    
   }
 }
 

@@ -1,3 +1,5 @@
+import { randNormal } from './utils';
+
 // 3D Vector math for physics
 export class Vec3 {
   constructor(public x: number, public y: number, public z: number) {}
@@ -14,12 +16,84 @@ export class Vec3 {
     return new Vec3(this.x * s, this.y * s, this.z * s);
   }
 
+  dot(v: Vec3): number {
+    return this.x * v.x + this.y * v.y + this.z * v.z;
+  }
+
+  cross(v: Vec3): Vec3 {
+    return new Vec3(
+      this.y * v.z - this.z * v.y,
+      this.z * v.x - this.x * v.z,
+      this.x * v.y - this.y * v.x
+    );
+  }
+
   mag(): number {
     return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
   }
 
   magSq(): number {
     return this.x * this.x + this.y * this.y + this.z * this.z;
+  }
+
+  normalize(): Vec3 {
+    const m = this.mag();
+    return m > 0 ? this.scale(1 / m) : new Vec3(0, 0, 0);
+  }
+
+  /**
+   * Returns a random unit vector perpendicular to this vector.
+   * Uses normal distribution for spherical symmetry.
+   * 
+   * Method: Generate random v, then compute normalized(v - proj_this(v))
+   * where proj_this(v) = (v · this / |this|²) * this
+   */
+  randomPerpendicular(): Vec3 {
+    const thisMagSq = this.magSq();
+    if (thisMagSq === 0) {
+      // Zero vector has no perpendicular - return random unit vector
+      return new Vec3(randNormal(), randNormal(), randNormal()).normalize();
+    }
+
+    // Keep trying until we get a valid perpendicular
+    // (avoid cases where v is nearly parallel to this)
+    for (let attempt = 0; attempt < 10; attempt++) {
+      // Random vector with spherically symmetric distribution
+      const v = new Vec3(randNormal(), randNormal(), randNormal());
+
+      // Project v onto this: proj = (v · this / |this|²) * this
+      const projScale = v.dot(this) / thisMagSq;
+      const proj = this.scale(projScale);
+
+      // Perpendicular component: v - proj
+      const perp = v.sub(proj);
+      const perpMag = perp.mag();
+
+      // Check if perpendicular component is large enough to normalize safely
+      if (perpMag > 0.01) {
+        return perp.scale(1 / perpMag);
+      }
+    }
+
+    // Fallback: construct perpendicular manually
+    // Find axis least aligned with this vector
+    const ax = Math.abs(this.x);
+    const ay = Math.abs(this.y);
+    const az = Math.abs(this.z);
+
+    let arbitrary: Vec3;
+    if (ax <= ay && ax <= az) {
+      arbitrary = new Vec3(1, 0, 0);
+    } else if (ay <= az) {
+      arbitrary = new Vec3(0, 1, 0);
+    } else {
+      arbitrary = new Vec3(0, 0, 1);
+    }
+
+    // Same projection method
+    const projScale = arbitrary.dot(this) / thisMagSq;
+    const perp = arbitrary.sub(this.scale(projScale));
+    return perp.normalize();
   }
 }
 
