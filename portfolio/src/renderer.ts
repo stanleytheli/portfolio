@@ -1,10 +1,13 @@
 import { GravitySimulation } from './gravity';
+import { Mat3, Vec3 } from './math';
 
 export class SimulationRenderer {
   private ctx: CanvasRenderingContext2D;
   private canvas: HTMLCanvasElement;
   sim: GravitySimulation; // Public so we can swap simulations
   z0: number; // Reference z for projection (public so UI can modify)
+  cameraRotation: Mat3 = Mat3.identity(); // Camera rotation matrix
+  cameraCenter: Vec3 = new Vec3(0, 0, 500); // Point to rotate around (star position)
 
   constructor(canvas: HTMLCanvasElement, sim: GravitySimulation, z0: number = 400) {
     this.canvas = canvas;
@@ -37,6 +40,14 @@ export class SimulationRenderer {
     return { screenX, screenY, screenRadius, scale };
   }
 
+  // Apply camera rotation to a position (relative to camera center)
+  private transformPosition(pos: Vec3): Vec3 {
+    // Translate to camera center, rotate, translate back
+    const relative = pos.sub(this.cameraCenter);
+    const rotated = this.cameraRotation.mulVec(relative);
+    return rotated.add(this.cameraCenter);
+  }
+
   render(): void {
     const { ctx, canvas, sim } = this;
 
@@ -44,15 +55,19 @@ export class SimulationRenderer {
     ctx.fillStyle = '#000000';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Sort bodies by z (far to near) for proper depth ordering
-    const sortedBodies = [...sim.bodies].sort((a, b) => b.pos.z - a.pos.z);
+    // Transform all bodies by camera rotation and sort by z
+    const transformedBodies = sim.bodies.map(body => ({
+      body,
+      transformed: this.transformPosition(body.pos)
+    }));
+    transformedBodies.sort((a, b) => b.transformed.z - a.transformed.z);
 
     // Draw bodies
-    for (const body of sortedBodies) {
+    for (const { body, transformed } of transformedBodies) {
       const projected = this.project(
-        body.pos.x,
-        body.pos.y,
-        body.pos.z,
+        transformed.x,
+        transformed.y,
+        transformed.z,
         body.radius
       );
 

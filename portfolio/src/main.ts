@@ -1,8 +1,8 @@
 import './style.css';
-import { GravitySimulation, Vec3 } from './gravity';
+import { GravitySimulation } from './gravity';
 import { SimulationRenderer } from './renderer';
-import { randUniform, randNormal, randLognormal } from './utils';
 import { initPortfolio } from './portfolio';
+import { Arcball } from './math';
 
 // Create fullscreen canvas
 const canvas = document.createElement('canvas');
@@ -73,84 +73,59 @@ const nSlider = document.getElementById('n-slider') as HTMLInputElement;
 const z0Value = document.getElementById('z0-value') as HTMLSpanElement;
 const nValue = document.getElementById('n-value') as HTMLSpanElement;
 
+// Initialize simulation
+const sim = new GravitySimulation();
+const renderer = new SimulationRenderer(canvas, sim, 400);
+
+// Initialize arcball for camera control
+const arcball = new Arcball(window.innerWidth, window.innerHeight);
+
 // Sizing
 function resize() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
+  const isMobile = window.innerWidth <= 640;
+  
+  // Arcball dimensions and center should match where the star is rendered
+  const arcballWidth = isMobile ? window.innerWidth : window.innerWidth * 0.55;
+  const centerX = isMobile ? canvas.width / 2 : canvas.width / 3;
+  const centerY = isMobile ? canvas.height / 4 : canvas.height / 2;
+  arcball.setSize(arcballWidth, canvas.height, centerX, centerY);
 }
+
+// Mouse event handlers for arcball camera control
+canvas.addEventListener('mousedown', (e) => {
+  // Only start drag if clicking in the gravity area (left 55% on desktop)
+  const isMobile = window.innerWidth <= 640;
+  const gravityAreaWidth = isMobile ? window.innerWidth : window.innerWidth * 0.55;
+  
+  if (e.clientX <= gravityAreaWidth) {
+    arcball.startDrag(e.clientX, e.clientY);
+  }
+});
+
+canvas.addEventListener('mousemove', (e) => {
+  if (arcball.isDragging()) {
+    arcball.drag(e.clientX, e.clientY);
+    renderer.cameraRotation = arcball.rotation;
+  }
+});
+
+canvas.addEventListener('mouseup', () => {
+  arcball.endDrag();
+});
+
+canvas.addEventListener('mouseleave', () => {
+  arcball.endDrag();
+});
+
 resize();
 window.addEventListener('resize', resize);
 
-// Initialize simulation
-let sim = new GravitySimulation();
-const renderer = new SimulationRenderer(canvas, sim, 400);
 
-
-
-
-
-function spawnBodies(n: number) {
-  sim = new GravitySimulation();
-  renderer.sim = sim;
-
-  // Central massive body (star)
-  const starMass = 5000
-  sim.createBody(0, 0, 500, 0, 0, 0, starMass, false, 15);
-
-  // Spawn orbiting bodies
-  for (let i = 0; i < n; i++) {
-    /*
-    const distance = randUniform(80, 300);
-    const theta = Math.random() * Math.PI * 2;
-    const phi = (Math.random() - 0.5) * Math.PI * 0.6;
-
-    const x = distance * Math.cos(theta) * Math.cos(phi);
-    const y = distance * Math.sin(theta) * Math.cos(phi);
-    const z = 500 + distance * Math.sin(phi);
-
-    const orbitalSpeed = Math.sqrt((sim.G * 500) / distance) * randUniform(0.4, 1.2);
-
-    const vx = -Math.sin(theta) * orbitalSpeed;
-    const vy = Math.cos(theta) * orbitalSpeed;
-    const vz = randUniform(-0.2, 0.2) * orbitalSpeed;
-
-    const mass = randUniform(5, 30);
-    */
-
-    // Orbital plane unit vector.
-    const orbital_plane = new Vec3(1, -1, -1).normalize();
-    
-    const r_hat = orbital_plane.randomPerpendicular();
-    const r = randUniform(150, 400);
-
-    const v_hat = orbital_plane.cross(r_hat);
-    const v = Math.sqrt((sim.G * starMass) / r) * randNormal(1.00, 0.05)
-
-    const xf = r * r_hat.x;
-    const yf = r * r_hat.y;
-    const zf = 500 + r * r_hat.z;
-
-    const vxf = v * v_hat.x;
-    const vyf = v * v_hat.y;
-    const vzf = v * v_hat.z;
-
-    // Add some noise to the position and velocity
-    const x = xf + randNormal(0, 0.1 * r)
-    const y = yf + randNormal(0, 0.1 * r)
-    const z = zf + randNormal(0, 0.1 * r)
-    const vx = vxf + randNormal(0, 0.1 * v)
-    const vy = vyf + randNormal(0, 0.1 * v)
-    const vz = vzf + randNormal(0, 0.1 * v)
-
-    const mass = randLognormal(2.5, 0.7) 
-    //const mass = randExp(0.0667)
-    sim.createBody(x, y, z, vx, vy, vz, mass);
-    
-  }
-}
-
-// Initial spawn
-spawnBodies(75);
+// Initial spawn and set camera center
+sim.reset(75);
+renderer.cameraCenter = sim.getStarPosition();
 
 // Update FOV helper
 function setFOV(value: number) {
@@ -170,7 +145,7 @@ z0Slider.addEventListener('input', () => {
 nSlider.addEventListener('input', () => {
   const n = parseInt(nSlider.value, 10);
   nValue.textContent = String(n);
-  spawnBodies(n);
+  sim.reset(n);
 });
 
 // Mouse wheel zoom for FOV

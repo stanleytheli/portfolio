@@ -1,101 +1,8 @@
-import { randNormal } from './utils';
+import { Vec3 } from './math';
+import { randUniform, randNormal, randLognormal } from './utils';
 
-// 3D Vector math for physics
-export class Vec3 {
-  constructor(public x: number, public y: number, public z: number) {}
-
-  add(v: Vec3): Vec3 {
-    return new Vec3(this.x + v.x, this.y + v.y, this.z + v.z);
-  }
-
-  sub(v: Vec3): Vec3 {
-    return new Vec3(this.x - v.x, this.y - v.y, this.z - v.z);
-  }
-
-  scale(s: number): Vec3 {
-    return new Vec3(this.x * s, this.y * s, this.z * s);
-  }
-
-  dot(v: Vec3): number {
-    return this.x * v.x + this.y * v.y + this.z * v.z;
-  }
-
-  cross(v: Vec3): Vec3 {
-    return new Vec3(
-      this.y * v.z - this.z * v.y,
-      this.z * v.x - this.x * v.z,
-      this.x * v.y - this.y * v.x
-    );
-  }
-
-  mag(): number {
-    return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
-  }
-
-  magSq(): number {
-    return this.x * this.x + this.y * this.y + this.z * this.z;
-  }
-
-  normalize(): Vec3 {
-    const m = this.mag();
-    return m > 0 ? this.scale(1 / m) : new Vec3(0, 0, 0);
-  }
-
-  /**
-   * Returns a random unit vector perpendicular to this vector.
-   * Uses normal distribution for spherical symmetry.
-   * 
-   * Method: Generate random v, then compute normalized(v - proj_this(v))
-   * where proj_this(v) = (v · this / |this|²) * this
-   */
-  randomPerpendicular(): Vec3 {
-    const thisMagSq = this.magSq();
-    if (thisMagSq === 0) {
-      // Zero vector has no perpendicular - return random unit vector
-      return new Vec3(randNormal(), randNormal(), randNormal()).normalize();
-    }
-
-    // Keep trying until we get a valid perpendicular
-    // (avoid cases where v is nearly parallel to this)
-    for (let attempt = 0; attempt < 10; attempt++) {
-      // Random vector with spherically symmetric distribution
-      const v = new Vec3(randNormal(), randNormal(), randNormal());
-
-      // Project v onto this: proj = (v · this / |this|²) * this
-      const projScale = v.dot(this) / thisMagSq;
-      const proj = this.scale(projScale);
-
-      // Perpendicular component: v - proj
-      const perp = v.sub(proj);
-      const perpMag = perp.mag();
-
-      // Check if perpendicular component is large enough to normalize safely
-      if (perpMag > 0.01) {
-        return perp.scale(1 / perpMag);
-      }
-    }
-
-    // Fallback: construct perpendicular manually
-    // Find axis least aligned with this vector
-    const ax = Math.abs(this.x);
-    const ay = Math.abs(this.y);
-    const az = Math.abs(this.z);
-
-    let arbitrary: Vec3;
-    if (ax <= ay && ax <= az) {
-      arbitrary = new Vec3(1, 0, 0);
-    } else if (ay <= az) {
-      arbitrary = new Vec3(0, 1, 0);
-    } else {
-      arbitrary = new Vec3(0, 0, 1);
-    }
-
-    // Same projection method
-    const projScale = arbitrary.dot(this) / thisMagSq;
-    const perp = arbitrary.sub(this.scale(projScale));
-    return perp.normalize();
-  }
-}
+// Re-export Vec3 for convenience
+export { Vec3 } from './math';
 
 // A celestial body with mass, position, velocity in 3D
 export interface Body {
@@ -111,6 +18,11 @@ export class GravitySimulation {
   bodies: Body[] = [];
   G: number = 1.0; // Gravitational constant
   softening: number = 20; // Prevents singularities
+  
+  // Star configuration
+  readonly starMass = 5000;
+  readonly starZ = 500;
+  readonly starRadius = 15;
 
   createBody(
     x: number,
@@ -187,5 +99,48 @@ export class GravitySimulation {
       const avgAcc = oldAccs[i].add(body.acc).scale(0.5);
       body.vel = body.vel.add(avgAcc.scale(dt));
     }
+  }
+
+  // Reset simulation with n orbiting bodies
+  reset(n: number): void {
+    this.bodies = [];
+
+    // Central massive body (star)
+    this.createBody(0, 0, this.starZ, 0, 0, 0, this.starMass, false, this.starRadius);
+
+    // Spawn orbiting bodies
+    const orbitalPlane = new Vec3(1, -1, -1).normalize();
+
+    for (let i = 0; i < n; i++) {
+      const rHat = orbitalPlane.randomPerpendicular();
+      const r = randUniform(150, 400);
+
+      const vHat = orbitalPlane.cross(rHat);
+      const v = Math.sqrt((this.G * this.starMass) / r) * randNormal(1.0, 0.05);
+
+      const xf = r * rHat.x;
+      const yf = r * rHat.y;
+      const zf = this.starZ + r * rHat.z;
+
+      const vxf = v * vHat.x;
+      const vyf = v * vHat.y;
+      const vzf = v * vHat.z;
+
+      // Add some noise to the position and velocity
+      const x = xf + randNormal(0, 0.1 * r);
+      const y = yf + randNormal(0, 0.1 * r);
+      const z = zf + randNormal(0, 0.1 * r);
+      const vx = vxf + randNormal(0, 0.1 * v);
+      const vy = vyf + randNormal(0, 0.1 * v);
+      const vz = vzf + randNormal(0, 0.1 * v);
+
+      const mass = randLognormal(2.5, 0.7);
+      this.createBody(x, y, z, vx, vy, vz, mass);
+    }
+  }
+
+  // Get star position for camera centering
+  getStarPosition(): Vec3 {
+    return new Vec3(0, 0, this.starZ);
   }
 }
