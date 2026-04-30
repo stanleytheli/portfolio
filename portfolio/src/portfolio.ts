@@ -42,6 +42,20 @@ export function initPortfolio(): void {
         <section class="portfolio-section">
           <h2 class="section-title"><span class="section-toggle">−</span> Experience</h2>
           <div class="section-content">
+
+            <article class="experience">
+              <div class="experience-header">
+                <img src="/sig_logo.jpg" alt="Company logo" class="experience-logo">
+                <div class="experience-info">
+                  <h3 class="experience-title">Susquehanna</h3>
+                  <span class="experience-company">Quantitative Trader Intern</span>
+                  <span class="experience-date">Incoming June 2027 - August 2027</span>
+                </div>
+              </div>
+              <p class="experience-desc">That's my quant.</p>
+            </article>
+
+
             <article class="experience">
               <div class="experience-header">
                 <img src="/msft_logo.png" alt="Company logo" class="experience-logo">
