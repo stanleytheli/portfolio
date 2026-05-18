@@ -20,9 +20,9 @@ export function initPortfolio(): void {
               Hello! My name's Stanley Li. I'm currently studying Math and CS at UC Berkeley.
               I'm passionate about creating things and doing science. 
               <br><br>
-              Currently at: Microsoft
-              <br>
-              Career Interests: AI/ML, Engineering/Research, Tech, Quant, Startups
+              Currently at: METR (Model Evaluation & Threat Research)
+              <br><br>
+              Career Interests: AI Safety/Research, Engineering, Tech, Quant, Startups
               <br>
               Regular Interests: <a href="https://www.substack.com/@stanleytheli">Creative Writing</a>, Climbing, Traveling, Math, Science, Philosophy, History
               <br><br>
@@ -43,42 +43,17 @@ export function initPortfolio(): void {
           <h2 class="section-title"><span class="section-toggle">−</span> Experience</h2>
           <div class="section-content">
 
-            <article class="experience">
-              <div class="experience-header">
-                <img src="/sig_logo.jpg" alt="Company logo" class="experience-logo">
-                <div class="experience-info">
-                  <h3 class="experience-title">Susquehanna</h3>
-                  <span class="experience-company">Quantitative Trader Intern</span>
-                  <span class="experience-date">Incoming June 2027 - August 2027</span>
-                </div>
-              </div>
-              <p class="experience-desc">That's my quant.</p>
-            </article>
-
 
             <article class="experience">
               <div class="experience-header">
-                <img src="/msft_logo.png" alt="Company logo" class="experience-logo">
+                <img src="/metr_logo_background.jpg" alt="Company logo" class="experience-logo">
                 <div class="experience-info">
-                  <h3 class="experience-title">Microsoft</h3>
-                  <span class="experience-company">Software Engineer Intern</span>
-                  <span class="experience-date">Incoming May 2026 - August 2026</span>
+                  <h3 class="experience-title">METR (Model Evaluation & Threat Research)</h3>
+                  <span class="experience-company">Research Contractor</span>
+                  <span class="experience-date">May 2026 - Present</span>
                 </div>
               </div>
-              <p class="experience-desc">Will be on the CoreAI team!</p>
-            </article>
-
-            <article class="experience">
-              <div class="experience-header">
-                <img src="/lbnl_logo.jpg" alt="Company logo" class="experience-logo">
-                <div class="experience-info">
-                  <h3 class="experience-title">Lawrence Berkeley Lab</h3>
-                  <span class="experience-company">Undergraduate Researcher</span>
-                  <span class="experience-date">August 2025 - January 2026</span>
-                </div>
-              </div>
-              <p class="experience-desc">Astrophysics research with the Perlmutter group, studying dark matter & energy. 
-              Using JAX to optimize GIGALens model across multiple GPU nodes.</p>
+              <p class="experience-desc">Evaluating frontier LLMs</p>
             </article>
 
             <article class="experience">
@@ -90,20 +65,31 @@ export function initPortfolio(): void {
                   <span class="experience-date">December 2025 - January 2026</span>
                 </div>
               </div>
-              <p class="experience-desc">Food delivery startup with significant VC backing.
-              Worked on backend engineering - building apps/services using Django/DRF, Elasticsearch, Docker, Redis caching.</p>
+              <p class="experience-desc">Backend engineering</p>
+            </article>
+            
+            <article class="experience">
+              <div class="experience-header">
+                <img src="/lbnl_logo.jpg" alt="Company logo" class="experience-logo">
+                <div class="experience-info">
+                  <h3 class="experience-title">Lawrence Berkeley Lab</h3>
+                  <span class="experience-company">Undergraduate Researcher</span>
+                  <span class="experience-date">August 2025 - January 2026</span>
+                </div>
+              </div>
+              <p class="experience-desc">Gravitational lensing research</p>
             </article>
 
             <article class="experience">
               <div class="experience-header">
                 <img src="/cs61b_logo.webp" alt="Company logo" class="experience-logo">
                 <div class="experience-info">
-                  <h3 class="experience-title">Tutor</h3>
-                  <span class="experience-company">UC Berkeley</span>
+                  <h3 class="experience-title">UC Berkeley</h3>
+                  <span class="experience-company">Tutor for CS 61B</span>
                   <span class="experience-date">May 2025 - August 2025</span>
                 </div>
               </div>
-              <p class="experience-desc">Course staff for CS 61B (Data Structures & Algorithms) here at UC Berkeley.</p>
+              <p class="experience-desc">Teaching students CS fundamentals</p>
             </article>
           </div>
         </section>
