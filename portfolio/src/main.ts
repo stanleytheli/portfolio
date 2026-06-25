@@ -17,10 +17,10 @@ controls.innerHTML = `
     <span class="slider-title">FOV</span>
     <div class="slider-row">
       <span class="slider-label">100</span>
-      <input type="range" id="z0-slider" min="100" max="1000" value="400">
+      <input type="range" id="z0-slider" min="100" max="1000" value="1000">
       <span class="slider-label">1000</span>
     </div>
-    <span class="slider-value" id="z0-value">400</span>
+    <span class="slider-value" id="z0-value">1000</span>
   </div>
   <div class="slider-group">
     <span class="slider-title">N</span>

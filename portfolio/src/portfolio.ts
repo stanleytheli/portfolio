@@ -20,7 +20,7 @@ export function initPortfolio(): void {
               Hello! My name's Stanley Li. I'm currently studying Math and CS at UC Berkeley.
               I'm passionate about creating things and doing science. 
               <br><br>
-              Currently at: METR (Model Evaluation & Threat Research)
+              Currently at: MATS (ML Alignment & Theory Scholars)
               <br><br>
               Career Interests: AI Safety/Research, Engineering, Tech, Quant, Startups
               <br>
@@ -43,6 +43,17 @@ export function initPortfolio(): void {
           <h2 class="section-title"><span class="section-toggle">−</span> Experience</h2>
           <div class="section-content">
 
+            <article class="experience">
+              <div class="experience-header">
+                <img src="/mats_logo.jpg" alt="Company logo" class="experience-logo">
+                <div class="experience-info">
+                  <h3 class="experience-title">MATS (ML Alignment & Theory Scholars)</h3>
+                  <span class="experience-company">Research Fellow</span>
+                  <span class="experience-date">June 2026 - Present</span>
+                </div>
+              </div>
+              <p class="experience-desc">Training model organisms via SFT, RL. Jailbreaking them using interpretability methods.</p>
+            </article>
 
             <article class="experience">
               <div class="experience-header">
@@ -50,10 +61,10 @@ export function initPortfolio(): void {
                 <div class="experience-info">
                   <h3 class="experience-title">METR (Model Evaluation & Threat Research)</h3>
                   <span class="experience-company">Research Contractor</span>
-                  <span class="experience-date">May 2026 - Present</span>
+                  <span class="experience-date">May 2026</span>
                 </div>
               </div>
-              <p class="experience-desc">Evaluating frontier LLMs</p>
+              <p class="experience-desc">Brief contracting work</p>
             </article>
 
             <article class="experience">
@@ -97,6 +108,17 @@ export function initPortfolio(): void {
         <section class="portfolio-section">
           <h2 class="section-title"><span class="section-toggle">−</span> Projects</h2>
           <div class="section-content">
+
+                      <article class="project">
+              <h3 class="project-title"><a href="https://github.com/stanleytheli/cubegpt-3">CubeGPT-3</a></h3>
+              <p class="project-desc">
+              Direct upgrade to CubeGPT (see below). Performed dozens more experiments to build custom architecture involving canonicalization and DeepseekV3 MoE. Increased sample efficiency 7x and trained new best-by-far CubeGPT models. 
+              <br><br>
+              Achieved average solve length of 19.0. (Optimal solvers achieve about 17.7). 
+              </p>
+              <img src="/cubegpt3_powerlaw.png" alt="Gravity Simulation screenshot" class="project-image">
+            </article>
+
             <article class="project">
               <h3 class="project-title"><a href="https://github.com/stanleytheli/cubegpt">CubeGPT</a></h3>
               <p class="project-desc">
