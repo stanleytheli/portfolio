@@ -74,7 +74,7 @@ Using these, and running the same SFT pipeline, we get up to 37% variance explai
 1200|0.88|64%
 1500|0.74|N/A
 
-Woah, what happened!? Our RL collapsed, our model quickly exploded in KL divergence from the SFT checkpoint, and average response length exploded while reward shot down. Peak seemed to occur somewhere near 1200 steps.
+Woah, what happened!? Our RL collapsed, our model quickly exploded in KL divergence from the SFT checkpoint, and average response length exploded while reward shot down. Peak seemed to occur somewhere near 1200 steps. I tried increasing batch size, decreasing learning rate, and resetting KL penalty to the 1200 peak, but it still seemed like RL had stalled. (In the future, it might be worthwhile to just try a really long RL run.)
 
 Final product on Hugging Face:
 
@@ -82,6 +82,32 @@ Final product on Hugging Face:
 
 [Activation Reconstructor (AR) Weights](https://huggingface.co/stanleytheli/qwen3.6-35B-A3B-ar-sft)
 
-## Sparse Autoencoder
+## Sparse Autoencoder (SAE)
 
-TBA
+We train BatchTopK SAEs for layers 10, 20, and 30 on 350M tokens. We use k=32 features; k=64 was tested and gave small benefits while significantly dropping interpretability scores. A learning rate schedule seems to help, increasing FVE ~2 percentage points.
+
+|Layer|FVE|
+|---|---|
+|10|72.8%|
+|20|69.6%|
+|30|71.6%|
+
+For our autointerp pipeline, we ask an LLM grader to interpret the feature from examples of text that activated it. The baseline achieves ~71% balanced accuracy on a held-out test set, ergo, its feature had 71% balanced prediction power on examples the grader didn't get to see (as judged by YET ANOTHER llm grader!).
+
+We try an experiment where we give it a chance to see a few examples it got wrong then refine its answers. We make sure to still eval against examples it never saw. This increases bal. acc. to 72%. 
+
+We try giving it the activation magnitude, which boosted the bal. acc. to 75%. We also try giving it activation magnitude and allowing it to refine, but this only provied a really marginal increase 75.3%, so I didn't think it was worth the trouble. 
+
+All of these figures are averaged across layers 10, 20, and 30. Looking closer, it seems interpretability drops as layer increases. We also measure the Spearman correlation: ask an LLM grader to rank the examples in terms of the feature label, then compare the correlation of those rankings to the true SAE activation magnitude rankings.
+
+|Layer|FVE|Bal. Acc|Spearman|
+|---|---|---|---|
+|10|72.8%|78.3%|0.553|
+|20|69.6%|75.3%|0.508|
+|30|71.6%|71.0%|0.396|
+
+We get bal. acc of ~70-80% and spearmans of ~0.4-0.55, which are pretty in line with the literature. These are low numbers! SAEs are fickle, imprecise instruments, and I'm excited for what concept decoding tools the interp community develops in their stead.
+
+Final product on Hugging Face:
+
+[SAE Weights](https://huggingface.co/stanleytheli/qwen3.6-35b-a3b-saes)

@@ -1,5 +1,5 @@
 ---
-title: Can Deepseek Detect an Edited Response?
+title: Can Deepseek Detect an Edited Prefill?
 date: 2026-05-14
 group: AI Research
 summary: A long, in-depth study on Deepseek's prefill awareness capabilities against a subtle attack. 
