@@ -1,0 +1,312 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.blog-body {
+  background: #000000;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: system-ui, sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+.blog-inner {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 6rem 24px 8rem 24px;
+}
+
+/* ---------- Index ---------- */
+.blog-header {
+  margin-bottom: 4rem;
+}
+
+.blog-name {
+  color: #ffffff;
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.blog-tagline {
+  color: rgba(255, 255, 255, 0.65);
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 1.05rem;
+  margin-top: 0.5rem;
+}
+
+.home-link {
+  display: inline-block;
+  margin-top: 1.5rem;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.home-link:hover {
+  color: #ffffff;
+}
+
+/* Group selector */
+.group-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 3rem;
+}
+
+.group-chip {
+  font-family: system-ui, sans-serif;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+
+.group-chip:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.group-chip.is-active {
+  color: #000000;
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
+.group {
+  margin-bottom: 3rem;
+}
+
+.group-title {
+  color: rgba(255, 255, 255, 0.55);
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.post-list {
+  list-style: none;
+}
+
+.post-item {
+  margin-bottom: 1.5rem;
+}
+
+.post-link {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  text-decoration: none;
+}
+
+.post-title {
+  color: rgba(255, 255, 255, 0.9);
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  transition: color 0.15s;
+}
+
+.post-link:hover .post-title {
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.post-date {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.post-summary {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-top: 0.35rem;
+}
+
+.empty {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ---------- Single post ---------- */
+.post-nav {
+  margin-bottom: 2.5rem;
+}
+
+.post-nav .home-link {
+  margin-top: 0;
+}
+
+.post-header {
+  margin-bottom: 2.5rem;
+}
+
+.post-group-tag {
+  display: inline-block;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.25rem 0.6rem;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.post-heading {
+  color: #ffffff;
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.post-meta-date {
+  display: block;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.85rem;
+  margin-top: 0.75rem;
+}
+
+/* ---------- Rendered Markdown ---------- */
+.post-content {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+
+.post-content > * + * {
+  margin-top: 1.25rem;
+}
+
+.post-content h1,
+.post-content h2,
+.post-content h3,
+.post-content h4 {
+  color: #ffffff;
+  font-family: "Trebuchet MS", sans-serif;
+  line-height: 1.25;
+  margin-top: 2.5rem;
+}
+
+.post-content h1 { font-size: 1.8rem; }
+.post-content h2 { font-size: 1.45rem; }
+.post-content h3 { font-size: 1.2rem; }
+
+.post-content a {
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.15s;
+}
+
+.post-content a:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.post-content strong {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.post-content ul,
+.post-content ol {
+  padding-left: 1.5rem;
+}
+
+.post-content li + li {
+  margin-top: 0.4rem;
+}
+
+.post-content blockquote {
+  border-left: 2px solid rgba(255, 255, 255, 0.2);
+  padding-left: 1.25rem;
+  color: rgba(255, 255, 255, 0.68);
+  font-style: italic;
+}
+
+.post-content code {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 0.9em;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+}
+
+.post-content pre {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+}
+
+.post-content pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.post-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* KaTeX math */
+.post-content .katex {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.post-content .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.5rem 0;
+}
+
+.post-content hr {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 2.5rem 0;
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 640px) {
+  .blog-inner {
+    padding: 3.5rem 20px 5rem 20px;
+  }
+
+  .blog-name {
+    font-size: 2.25rem;
+  }
+
+  .post-heading {
+    font-size: 1.75rem;
+  }
+
+  .post-link {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}

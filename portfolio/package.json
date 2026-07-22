@@ -11,5 +11,10 @@
   "devDependencies": {
     "typescript": "~5.8.3",
     "vite": "^7.1.2"
+  },
+  "dependencies": {
+    "katex": "^0.17.0",
+    "marked": "^18.0.7",
+    "marked-katex-extension": "^5.1.10"
   }
 }
