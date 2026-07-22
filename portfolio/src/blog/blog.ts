@@ -215,7 +215,10 @@ function renderPost(slug: string): void {
     return;
   }
 
-  const html = marked.parse(post.body, { async: false }) as string;
+  // Wrap tables so wide ones scroll horizontally instead of overflowing.
+  const html = (marked.parse(post.body, { async: false }) as string)
+    .replace(/<table>/g, '<div class="table-wrap"><table>')
+    .replace(/<\/table>/g, '</table></div>');
   document.title = `${post.title} — Stanley Li`;
 
   root.innerHTML = `
