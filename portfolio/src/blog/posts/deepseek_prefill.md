@@ -7,6 +7,8 @@ summary: A long, in-depth study on Deepseek's prefill awareness capabilities aga
 
 # Searching for Effects of Prefill Attacking on Model Behavior
 
+Code availability: I can (probably) publish the repo of this project, containing code & transcripts,  soon.
+
 ## Motivation
 
 We would like to be able to inject beliefs into models in order to simulate specific failure cases. For instance, the belief that it is a good time to misbehave. In the best case, such an attack would let us probe what a model would actually do if it came to that conclusion itself --- "naturally", so to speak.
@@ -96,6 +98,7 @@ $C = user_0 \rightarrow assistant_0 \rightarrow \cdots \rightarrow user_n \right
 We sample across $assistant_n$, which is a generous lower bound for the variance from sampling across all assistant responses. We then ask the LLM a question and calculate statistics on the probabilities of each token. We calculate the effect size  $\delta = \Delta P/ \sigma_P$, which represents how much the prefill attack changed the behavior relative to the standard LLM variance. 
 
 ![](deepseek_images/weighted_avg_effsize.png)
+
 Across our sample of 30 questions, with 100 rollouts each (50/50 normal/poisoned), all but 3 have less than 0.5 effect size, and all have less than 1.0 effect size.
 
 We observe effect sizes consistently <0.5, meaning that the distribution shift from the prefill attack is on at least a 2x smaller scale than the distribution shift from just varying $assistant_n$. 
@@ -358,7 +361,7 @@ As a reminder, $C$ and $C'$ are multiturn conversations with last message belong
 
 Let $C$ and $C'$ be random variables, with the randomness coming from sampling over the last assistant message. On each trial, we append a question $q$ to the end of the context. $q$ is of the form "... Answer with only the name." so that the LLM's token predictions reflect its immediate answer to the question.
 
-For each possible answer token $t_i$, the LLM predicts $P(t_i | C, q)$. Abbreviate this $P_i(C)$ (we won't need $q$). This is random because of $C$ so we can take its expected value $\mathbb{E}[P_i(C)], Var(P_i(C)),$ and $\mathbb{E}[P_i(C')]$.
+For each possible answer token $t_i$, the LLM predicts $P(t_i | C, q)$. Abbreviate this $P_i(C)$ (we won't need $q$ ). This is random because of $C$ so we can take its expected value $\mathbb{E}[P_i(C)], Var(P_i(C)),$ and $\mathbb{E}[P_i(C')]$.
 
 Define the effect size 
 
