@@ -39,6 +39,10 @@ In the multihop eval, we ask a question like "What is the currency in the countr
 
 The same behavior emerges, with the J-lens showing significantly better performance except at the very early layers. 
 
+Final product on Hugging Face:
+
+[J-Lens Weights](https://huggingface.co/stanleytheli/qwen3.6-35B-A3B-jlens)
+
 ## Natural Language Autoencoder (NLA)
 
 [Link to reference paper](https://transformer-circuits.pub/2026/nla/index.html)
@@ -72,11 +76,11 @@ Using these, and running the same SFT pipeline, we get up to 37% variance explai
 
 Woah, what happened!? Our RL collapsed, our model quickly exploded in KL divergence from the SFT checkpoint, and average response length exploded while reward shot down. Peak seemed to occur somewhere near 1200 steps.
 
-I've published the peak model weights on Hugging Face: 
+Final product on Hugging Face:
 
-[Activation Verbalizer (AV)](https://huggingface.co/stanleytheli/qwen3.6-35B-A3B-av-RL1200)
+[Activation Verbalizer (AV) Weights](https://huggingface.co/stanleytheli/qwen3.6-35B-A3B-av-RL1200)
 
-[Activation Reconstructor (AR)](https://huggingface.co/stanleytheli/qwen3.6-35B-A3B-ar-sft)
+[Activation Reconstructor (AR) Weights](https://huggingface.co/stanleytheli/qwen3.6-35B-A3B-ar-sft)
 
 ## Sparse Autoencoder
 
