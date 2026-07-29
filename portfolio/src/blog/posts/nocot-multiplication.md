@@ -1,5 +1,5 @@
 ---
-title: Intelligence per Token? No-Thinking Multiplication
+title: Testing LLM "Mental Math"
 date: 2026-07-28
 group: AI Research
 summary: LLMs can multiply large numbers without thinking, but the trend is mostly flat?
@@ -27,7 +27,7 @@ An interesting thing to notice is the slight asymmetry in x and y. Small * Big i
 
 ## Harmonic Mean
 
-I find that fitting a sigmoid to the harmonic mean of x and y's digit counts gives very good results. Why? Imagine the model only got the question right if `harmonic mean < x`, so then the relevant boundary would be the harmonic mean's level set at x. If you plot it, this level set looks something like one corner of a squircle, the other sides extending infinitely out. If you look at the 3D accuracy graphs from above, they give almost that exact shape (with some, but not much, model dependence).
+I find that fitting a sigmoid to the harmonic mean of x and y's digit counts gives very good results. Why? Imagine the model only got the question right if `harmonic mean < c`, so then the relevant boundary would be the harmonic mean's level set at `c`. If you plot it, this level set looks something like one corner of a squircle, the other sides extending infinitely out. If you look at the 3D accuracy graphs from above, they give almost that exact shape (with some, but not much, model dependence).
 
 Hover to see individual data points. The fit is a little bad for the large Qwens but otherwise it seems to track the shape very well. If you look at the Qwen graphs, they look almost like a square cutout. Indeed, if we fit to `min(digits in x, digits in y)` then the fit is significantly better! The graphs below still use sigmoids for consistency.
 
