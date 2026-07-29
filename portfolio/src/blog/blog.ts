@@ -237,7 +237,64 @@ function renderPost(slug: string): void {
     </div>
   `;
   window.scrollTo(0, 0);
+  sizeEmbeds();
 }
+
+/**
+ * Auto-size interactive `<iframe class="graph-embed">` embeds to their content.
+ *
+ * To embed an interactive graph in a post, drop a self-contained HTML page in
+ * `public/interactive/` and reference it with a raw iframe in the Markdown:
+ *
+ *   <iframe class="graph-embed" src="/interactive/nocot-scaling.html"
+ *           title="No-CoT multiplication scaling fits"></iframe>
+ *
+ * The iframe is same-origin, so we read its content height and match the frame
+ * to it (no inner scrollbar), re-syncing whenever the inner content reflows.
+ */
+function sizeEmbeds(): void {
+  const frames = root.querySelectorAll<HTMLIFrameElement>('iframe.graph-embed');
+  frames.forEach((f) => {
+    const fit = () => {
+      try {
+        const d = f.contentDocument;
+        if (!d) return;
+        const h = Math.max(
+          d.documentElement?.scrollHeight ?? 0,
+          d.body?.scrollHeight ?? 0
+        );
+        if (h) f.style.height = h + 'px';
+      } catch {
+        /* cross-origin (shouldn't happen for /interactive/*) — leave as-is */
+      }
+    };
+    if (!f.dataset.wired) {
+      f.dataset.wired = '1';
+      f.addEventListener('load', () => {
+        fit();
+        try {
+          const d = f.contentDocument;
+          if (d && 'ResizeObserver' in window) {
+            const ro = new ResizeObserver(() => fit());
+            ro.observe(d.documentElement);
+            if (d.body) ro.observe(d.body);
+          }
+        } catch {
+          /* ignore */
+        }
+      });
+    }
+    fit();
+  });
+}
+
+// The inner graphs are responsive: when the window resizes they reflow and
+// their height can change, so re-fit the frames after layout settles.
+let _embedResizeTimer: number | undefined;
+window.addEventListener('resize', () => {
+  clearTimeout(_embedResizeTimer);
+  _embedResizeTimer = window.setTimeout(sizeEmbeds, 160);
+});
 
 function route(): void {
   const hash = decodeURIComponent(window.location.hash.replace(/^#/, ''));

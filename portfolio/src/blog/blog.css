@@ -274,6 +274,33 @@
   border-radius: 8px;
 }
 
+/* Interactive graph embeds (self-contained pages in public/interactive/).
+   Height is set at runtime by sizeEmbeds() in blog.ts. */
+.post-content iframe.graph-embed {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-radius: 10px;
+  margin: 1.5rem 0 0.5rem;
+  background: transparent;
+  color-scheme: dark;
+}
+
+/* Optional caption directly after an embed: use a normal paragraph in italics,
+   or wrap with <figure class="graph-figure"><iframe .../><figcaption>…. */
+.post-content .graph-figure {
+  margin: 1.5rem 0;
+}
+.post-content .graph-figure iframe.graph-embed {
+  margin: 0;
+}
+.post-content .graph-figure figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.55);
+  text-align: center;
+}
+
 /* Tables */
 .post-content .table-wrap {
   overflow-x: auto;

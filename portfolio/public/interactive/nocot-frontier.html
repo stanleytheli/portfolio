@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The METR of No-CoT Multiplication</title>
+</head>
+<body>
+<title>The METR of No-CoT Multiplication</title>
+<style>
+  :root{
+    --bg:#fcfcfb; --panel:#ffffff; --ink:#1b1b1a; --muted:#6b6b66; --faint:#9a9a93;
+    --grid:#eceae4; --hair:#e0ddd5; --edge:#d8d5cc;
+    --fam-Qwen:#6b4fbb; --fam-Gemma:#0f9d8f; --fam-Anthropic:#d9723b;
+    --fam-DeepSeek:#2f6fd0; --fam-OpenAI:#c23b8a;
+    --accent:#6b4fbb;
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Mono","Roboto Mono",Menlo,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#1a1a19; --panel:#232320; --ink:#ecebe6; --muted:#a3a29a; --faint:#75746c;
+      --grid:#2f2f2b; --hair:#34342f; --edge:#3a3a34;
+      --fam-Qwen:#9b7ce8; --fam-Gemma:#1a9880; --fam-Anthropic:#cc8024;
+      --fam-DeepSeek:#4a97e0; --fam-OpenAI:#d15c92; --accent:#9b7ce8;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#1a1a19; --panel:#232320; --ink:#ecebe6; --muted:#a3a29a; --faint:#75746c;
+    --grid:#2f2f2b; --hair:#34342f; --edge:#3a3a34;
+    --fam-Qwen:#9b7ce8; --fam-Gemma:#1a9880; --fam-Anthropic:#cc8024;
+    --fam-DeepSeek:#4a97e0; --fam-OpenAI:#d15c92; --accent:#9b7ce8;
+  }
+  :root[data-theme="light"]{
+    --bg:#fcfcfb; --panel:#ffffff; --ink:#1b1b1a; --muted:#6b6b66; --faint:#9a9a93;
+    --grid:#eceae4; --hair:#e0ddd5; --edge:#d8d5cc;
+    --fam-Qwen:#6b4fbb; --fam-Gemma:#0f9d8f; --fam-Anthropic:#d9723b;
+    --fam-DeepSeek:#2f6fd0; --fam-OpenAI:#c23b8a; --accent:#6b4fbb;
+  }
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;
+    margin:0;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  .wrap{max-width:940px;margin:0 auto;padding:clamp(20px,4vw,56px) clamp(16px,4vw,40px) 72px}
+  header{border-bottom:1px solid var(--hair);padding-bottom:26px;margin-bottom:34px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);margin:0 0 12px}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(30px,5.4vw,50px);line-height:1.04;
+    letter-spacing:-.01em;margin:0 0 14px;text-wrap:balance}
+  .dek{font-size:clamp(15px,2.4vw,18px);color:var(--muted);max-width:64ch;margin:0}
+  .dek b{color:var(--ink);font-weight:600}
+  h2{font-family:var(--serif);font-weight:600;font-size:clamp(20px,3vw,26px);letter-spacing:-.005em;
+    margin:0 0 4px}
+  .sub{color:var(--muted);font-size:14.5px;margin:0 0 18px;max-width:70ch}
+  section{margin-top:46px}
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:26px}
+  .tile{background:var(--panel);border:1px solid var(--hair);border-radius:12px;padding:16px 18px}
+  .tile .n{font-family:var(--mono);font-size:26px;font-weight:600;letter-spacing:-.02em;
+    font-variant-numeric:tabular-nums}
+  .tile .l{font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.35}
+  .card{background:var(--panel);border:1px solid var(--hair);border-radius:14px;
+    padding:18px 16px 12px;overflow-x:auto}
+  svg{display:block;width:100%;height:auto;font-family:var(--sans)}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;margin:12px 2px 2px;font-size:13px}
+  .legend button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:7px;
+    color:var(--muted);padding:2px 4px;border-radius:6px}
+  .legend button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .legend .sw{width:11px;height:11px;border-radius:3px;flex:none}
+  .legend button[aria-pressed="true"]{color:var(--ink);font-weight:600}
+  .legend .hint{color:var(--faint);font-size:12px;margin-left:auto;align-self:center}
+  .tip{position:fixed;pointer-events:none;z-index:20;background:var(--panel);color:var(--ink);
+    border:1px solid var(--edge);border-radius:10px;padding:9px 11px;font-size:12.5px;
+    box-shadow:0 8px 26px rgba(0,0,0,.18);opacity:0;transition:opacity .09s;max-width:260px}
+  .tip .t{font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+  .tip .r{color:var(--muted);font-variant-numeric:tabular-nums;font-family:var(--mono);font-size:11.5px}
+  .tip .r b{color:var(--ink);font-weight:600}
+  .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .note{color:var(--muted);font-size:13px;margin-top:14px;max-width:72ch}
+  .note b{color:var(--ink)}
+  footer{margin-top:54px;padding-top:22px;border-top:1px solid var(--hair);
+    color:var(--faint);font-size:12.5px;font-family:var(--mono);line-height:1.7}
+  a{color:var(--accent)}
+</style>
+
+<div class="wrap">
+
+  <section>
+    <h2>Does “intelligence” predict it?</h2>
+    <p class="sub">No-CoT multiplication capability (y) against each model's <b>Artificial Analysis Intelligence
+      Index</b> (x) — the latter measured with reasoning fully <b>on</b> (max effort). All 18 models.</p>
+    <div class="card"><svg id="chart-scatter" role="img" aria-label="50% point vs Artificial Analysis Intelligence Index"></svg></div>
+    <p class="note">Only a <b>moderate</b> link (r ≈ 0.57 — and much of that is small models being weak at both
+      ends), and the telling part is <i>where the frontier
+      chat models sit</i>: the four highest-intelligence models (AA ≥ 51 — Opus 5, Sol, Terra, Sonnet 5) average
+      <b>4.14</b>, <i>below</i> the mid-index open models (AA 31–44) at <b>4.66</b>. The most intelligent models
+      are <b>worse</b> no-CoT multipliers — because their intelligence lives in the reasoning we switched off.
+      DeepSeek Pro and the Qwen open models sit well <i>above</i> the trend; the whole Anthropic/OpenAI cluster sits below it.</p>
+  </section>
+
+  <footer id="foot"></footer>
+</div>
+
+<div class="tip" id="tip"></div>
+
+<script>
+// aa = Artificial Analysis Intelligence Index (reasoning / max effort); null = not on AA.
+const DATA = [
+ {label:"Qwen3.5-2B",short:"Q2B",family:"Qwen",x0:2.654,w:0.6636,iq:1.458,disc:0.44,n:61696,aa:7},
+ {label:"Gemma4-E2B",short:"GE2B",family:"Gemma",x0:2.806,w:0.4284,iq:0.941,disc:0.10,n:48384,aa:15},
+ {label:"Gemma4-E4B",short:"GE4B",family:"Gemma",x0:3.004,w:0.3945,iq:0.867,disc:0.01,n:47104,aa:19},
+ {label:"Gemma4-12B",short:"G12B",family:"Gemma",x0:3.105,w:0.3742,iq:0.822,disc:0.45,n:25088,aa:22},
+ {label:"Qwen3.5-4B",short:"Q4B",family:"Qwen",x0:3.626,w:0.6644,iq:1.460,disc:0.01,n:61696,aa:20},
+ {label:"Claude-Sonnet-5",short:"Sonnet5",family:"Anthropic",x0:3.716,w:0.4801,iq:1.055,disc:35.99,n:29952,aa:53},
+ {label:"Gemma4-31B",short:"G31B",family:"Gemma",x0:3.750,w:0.4110,iq:0.903,disc:1.84,n:20480,aa:39},
+ {label:"GPT-5.6-Luna",short:"Luna",family:"OpenAI",x0:3.760,w:0.4321,iq:0.949,disc:6.67,n:26624,aa:51},
+ {label:"Gemma4-26B-A4B",short:"G26B",family:"Gemma",x0:4.003,w:0.4407,iq:0.968,disc:3.10,n:25344,aa:31},
+ {label:"Qwen3.5-9B",short:"Q9B",family:"Qwen",x0:4.209,w:0.5617,iq:1.234,disc:0.00,n:27392,aa:21},
+ {label:"GPT-5.6-Terra",short:"Terra",family:"OpenAI",x0:4.221,w:0.4448,iq:0.977,disc:1.19,n:25344,aa:55},
+ {label:"DeepSeek-V4-Flash",short:"DS-Flash",family:"DeepSeek",x0:4.223,w:0.4973,iq:1.093,disc:0.09,n:26112,aa:40},
+ {label:"Claude-Opus-5",short:"Opus5",family:"Anthropic",x0:4.441,w:0.4518,iq:0.993,disc:4.43,n:26368,aa:61},
+ {label:"GPT-5.6-Sol",short:"Sol",family:"OpenAI",x0:4.570,w:0.4493,iq:0.987,disc:0.77,n:25856,aa:59},
+ {label:"Qwen3.6-35B-A3B",short:"Q35B-A3B",family:"Qwen",x0:4.810,w:0.5500,iq:1.209,disc:0.00,n:56320,aa:32},
+ {label:"DeepSeek-V4-Pro",short:"DS-Pro",family:"DeepSeek",x0:4.829,w:0.5986,iq:1.315,disc:0.02,n:27648,aa:44},
+ {label:"Qwen3.6-27B",short:"Q27B",family:"Qwen",x0:5.307,w:0.5991,iq:1.316,disc:0.01,n:20480,aa:37},
+ {label:"Qwen3.5-122B-A10B",short:"Q122B",family:"Qwen",x0:5.689,w:0.5487,iq:1.206,disc:0.00,n:25088,aa:42},
+];
+const FAMILIES=["Qwen","Gemma","DeepSeek","Anthropic","OpenAI"];
+const NS="http://www.w3.org/2000/svg";
+const tip=document.getElementById("tip");
+let hidden=new Set();
+
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const famColor=f=>css("--fam-"+f);
+const el=(n,a={})=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);return e;};
+const fmt=n=>n.toLocaleString("en-US");
+
+const _ts=document.getElementById("t-samples");
+if(_ts)_ts.textContent=(DATA.reduce((s,d)=>s+d.n,0)/1000).toFixed(0)+"k";
+
+function showTip(html,x,y){tip.innerHTML=html;tip.style.opacity="1";
+  const r=tip.getBoundingClientRect();let nx=x+14,ny=y+14;
+  if(nx+r.width>innerWidth-8)nx=x-r.width-14; if(ny+r.height>innerHeight-8)ny=y-r.height-14;
+  tip.style.left=nx+"px";tip.style.top=ny+"px";}
+const hideTip=()=>tip.style.opacity="0";
+const pAt=(d,x)=>100/(1+Math.exp((x-d.x0)/d.w));
+
+/* ---------- Chart 1: frontier lollipop ---------- */
+function frontier(){
+  const svg=document.getElementById("chart-frontier");if(!svg)return;svg.textContent="";
+  const rows=[...DATA].sort((a,b)=>a.x0-b.x0);
+  const W=880,rh=27,padT=8,padB=34,padL=150,padR=54;
+  const H=padT+padB+rows.length*rh;
+  svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  const xmin=2,xmax=6, X=v=>padL+(v-xmin)/(xmax-xmin)*(W-padL-padR);
+  for(let g=2;g<=6;g++){
+    svg.append(el("line",{x1:X(g),y1:padT,x2:X(g),y2:H-padB,stroke:css("--grid"),"stroke-width":1}));
+    svg.append(Object.assign(el("text",{x:X(g),y:H-padB+18,fill:css("--faint"),"font-size":11,
+      "text-anchor":"middle","font-family":"var(--mono)"}),{textContent:g}));
+  }
+  svg.append(Object.assign(el("text",{x:(padL+W-padR)/2,y:H-6,fill:css("--muted"),"font-size":11.5,
+    "text-anchor":"middle"}),{textContent:"50% point  ·  harmonic mean of operand digit counts"}));
+  rows.forEach((d,i)=>{
+    const y=padT+i*rh+rh/2,col=famColor(d.family),x=X(d.x0);
+    const g=el("g",{});g.style.cursor="default";
+    g.append(el("line",{x1:padL,y1:y,x2:x,y2:y,stroke:col,"stroke-width":2,opacity:.32}));
+    g.append(el("circle",{cx:x,cy:y,r:5.5,fill:col}));
+    g.append(Object.assign(el("text",{x:padL-10,y:y+3.5,fill:css("--ink"),"font-size":11.5,
+      "text-anchor":"end"}),{textContent:d.label}));
+    g.append(Object.assign(el("text",{x:x+11,y:y+3.5,fill:css("--muted"),"font-size":11,
+      "font-family":"var(--mono)","font-variant-numeric":"tabular-nums"}),{textContent:d.x0.toFixed(2)}));
+    const hit=el("rect",{x:0,y:y-rh/2,width:W,height:rh,fill:"transparent"});
+    hit.addEventListener("mousemove",e=>showTip(tipHtml(d),e.clientX,e.clientY));
+    hit.addEventListener("mouseleave",hideTip);
+    g.append(hit);svg.append(g);
+  });
+}
+function tipHtml(d){return `<div class="t"><span class="dot" style="background:${famColor(d.family)}"></span>${d.label}</div>`+
+  `<div class="r">lab <b>${d.family}</b></div>`+
+  `<div class="r">50% point <b>${d.x0.toFixed(2)}</b> harm-digits</div>`+
+  `<div class="r">25–75% width <b>${d.iq.toFixed(2)}</b></div>`+
+  `<div class="r">discard <b>${d.disc.toFixed(1)}%</b> · N=<b>${fmt(d.n)}</b></div>`;}
+
+/* ---------- Chart 2: capability S-curves ---------- */
+function curves(){
+  const svg=document.getElementById("chart-curves");if(!svg)return;svg.textContent="";
+  const W=880,H=380,padL=44,padR=16,padT=14,padB=40;
+  svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  const xmin=1,xmax=12, X=v=>padL+(v-xmin)/(xmax-xmin)*(W-padL-padR), Y=p=>padT+(1-p/100)*(H-padT-padB);
+  for(let p=0;p<=100;p+=25){
+    svg.append(el("line",{x1:padL,y1:Y(p),x2:W-padR,y2:Y(p),stroke:css("--grid"),"stroke-width":1}));
+    svg.append(Object.assign(el("text",{x:padL-8,y:Y(p)+3.5,fill:css("--faint"),"font-size":10.5,
+      "text-anchor":"end","font-family":"var(--mono)"}),{textContent:p+"%"}));
+  }
+  for(let g=2;g<=12;g+=2){
+    svg.append(Object.assign(el("text",{x:X(g),y:H-padB+18,fill:css("--faint"),"font-size":10.5,
+      "text-anchor":"middle","font-family":"var(--mono)"}),{textContent:g}));
+  }
+  svg.append(Object.assign(el("text",{x:(padL+W-padR)/2,y:H-6,fill:css("--muted"),"font-size":11.5,
+    "text-anchor":"middle"}),{textContent:"difficulty  →  harmonic mean of operand digit counts"}));
+  const paths=[];
+  DATA.forEach(d=>{
+    if(hidden.has(d.family))return;
+    let pts="";for(let x=xmin;x<=xmax;x+=0.1){pts+=(pts?"L":"M")+X(x).toFixed(1)+","+Y(pAt(d,x)).toFixed(1);}
+    const p=el("path",{d:pts,fill:"none",stroke:famColor(d.family),"stroke-width":1.9,
+      opacity:.8,"stroke-linejoin":"round"});
+    p._d=d;paths.push(p);svg.append(p);
+  });
+  const cross=el("line",{x1:0,y1:padT,x2:0,y2:H-padB,stroke:css("--edge"),"stroke-width":1,
+    "stroke-dasharray":"3 3",opacity:0});svg.append(cross);
+  const hit=el("rect",{x:padL,y:padT,width:W-padL-padR,height:H-padT-padB,fill:"transparent"});
+  hit.addEventListener("mousemove",e=>{
+    const r=svg.getBoundingClientRect(),sx=(e.clientX-r.left)/r.width*W,sy=(e.clientY-r.top)/r.height*H;
+    const xv=xmin+(sx-padL)/(W-padL-padR)*(xmax-xmin);
+    if(xv<xmin||xv>xmax){hideTip();cross.setAttribute("opacity",0);return;}
+    cross.setAttribute("x1",X(xv));cross.setAttribute("x2",X(xv));cross.setAttribute("opacity",.9);
+    let best=null,bd=1e9;
+    paths.forEach(p=>{const yy=Y(pAt(p._d,xv));const dd=Math.abs(yy-sy);if(dd<bd){bd=dd;best=p;}
+      p.setAttribute("stroke-width",1.4);p.setAttribute("opacity",.35);});
+    if(best){best.setAttribute("stroke-width",3);best.setAttribute("opacity",1);
+      const d=best._d,acc=pAt(d,xv);
+      showTip(`<div class="t"><span class="dot" style="background:${famColor(d.family)}"></span>${d.label}</div>`+
+        `<div class="r">at harmonic <b>${xv.toFixed(1)}</b></div>`+
+        `<div class="r">predicted accuracy <b>${acc.toFixed(0)}%</b></div>`+
+        `<div class="r">its own 50% point <b>${d.x0.toFixed(2)}</b></div>`,e.clientX,e.clientY);}
+  });
+  hit.addEventListener("mouseleave",()=>{hideTip();cross.setAttribute("opacity",0);
+    paths.forEach(p=>{p.setAttribute("stroke-width",1.9);p.setAttribute("opacity",.8);});});
+  svg.append(hit);
+}
+function legend(){
+  const box=document.getElementById("legend");if(!box)return;box.innerHTML="";
+  FAMILIES.forEach(f=>{
+    const b=document.createElement("button");b.setAttribute("aria-pressed",!hidden.has(f));
+    b.innerHTML=`<span class="sw" style="background:${famColor(f)}"></span>${f}`;
+    b.onclick=()=>{hidden.has(f)?hidden.delete(f):hidden.add(f);
+      if(hidden.size===FAMILIES.length)hidden.clear();legend();curves();};
+    box.append(b);
+  });
+  const h=document.createElement("span");h.className="hint";h.textContent="click a lab to isolate · hover a curve to read it";
+  box.append(h);
+}
+
+/* ---------- Chart 0: scatter — 50% vs AA intelligence ---------- */
+function scatter(){
+  const svg=document.getElementById("chart-scatter");if(!svg)return;svg.textContent="";
+  const pts=DATA.filter(d=>d.aa!=null);
+  const W=880,H=520,padL=54,padR=24,padT=16,padB=48;
+  svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  const xmin=12,xmax=64,ymin=2.4,ymax=6.0;
+  const X=v=>padL+(v-xmin)/(xmax-xmin)*(W-padL-padR);
+  const Y=v=>padT+(1-(v-ymin)/(ymax-ymin))*(H-padT-padB);
+  for(let g=20;g<=60;g+=10){
+    svg.append(el("line",{x1:X(g),y1:padT,x2:X(g),y2:H-padB,stroke:css("--grid"),"stroke-width":1}));
+    svg.append(Object.assign(el("text",{x:X(g),y:H-padB+18,fill:css("--faint"),"font-size":10.5,
+      "text-anchor":"middle","font-family":"var(--mono)"}),{textContent:g}));
+  }
+  for(let g=3;g<=6;g++){
+    svg.append(el("line",{x1:padL,y1:Y(g),x2:W-padR,y2:Y(g),stroke:css("--grid"),"stroke-width":1}));
+    svg.append(Object.assign(el("text",{x:padL-9,y:Y(g)+3.5,fill:css("--faint"),"font-size":10.5,
+      "text-anchor":"end","font-family":"var(--mono)"}),{textContent:g.toFixed(1)}));
+  }
+  svg.append(Object.assign(el("text",{x:(padL+W-padR)/2,y:H-6,fill:css("--muted"),"font-size":11.5,
+    "text-anchor":"middle"}),{textContent:"Artificial Analysis Intelligence Index  (reasoning ON, max effort)  →"}));
+  const yl=el("text",{x:14,y:(padT+H-padB)/2,fill:css("--muted"),"font-size":11.5,"text-anchor":"middle",
+    transform:`rotate(-90 14 ${(padT+H-padB)/2})`});yl.textContent="no-CoT 50% point  (harmonic-mean digits)  →";
+  svg.append(yl);
+  // least-squares trend
+  const xs=pts.map(p=>p.aa),ys=pts.map(p=>p.x0),n=pts.length;
+  const mx=xs.reduce((a,b)=>a+b)/n,my=ys.reduce((a,b)=>a+b)/n;
+  let sxy=0,sxx=0,syy=0;for(let i=0;i<n;i++){sxy+=(xs[i]-mx)*(ys[i]-my);sxx+=(xs[i]-mx)**2;syy+=(ys[i]-my)**2;}
+  const sl=sxy/sxx,r=sxy/Math.sqrt(sxx*syy);
+  svg.append(el("line",{x1:X(xmin),y1:Y(my+sl*(xmin-mx)),x2:X(xmax),y2:Y(my+sl*(xmax-mx)),
+    stroke:css("--faint"),"stroke-width":1.5,"stroke-dasharray":"5 4",opacity:.8}));
+  svg.append(Object.assign(el("text",{x:W-padR,y:padT+14,fill:css("--muted"),"font-size":12,
+    "text-anchor":"end","font-family":"var(--mono)"}),{textContent:`r = ${r.toFixed(2)}  (weak)`}));
+  // points + de-collided labels
+  const placed=[];
+  pts.slice().sort((a,b)=>Y(a.x0)-Y(b.x0)).forEach(d=>{
+    const cx=X(d.aa),cy=Y(d.x0),col=famColor(d.family);
+    const g=el("g",{});
+    g.append(el("circle",{cx,cy,r:5.5,fill:col,stroke:css("--panel"),"stroke-width":1.5}));
+    let lx=cx+9,ly=cy+3.5;
+    for(const p of placed){if(Math.abs(ly-p)<11&&true)ly=p+12;} placed.push(ly);
+    if(lx>W-70){lx=cx-9;}
+    const t=Object.assign(el("text",{x:lx,y:ly,fill:css("--ink"),"font-size":10.5,
+      "text-anchor":lx<cx?"end":"start"}),{textContent:d.short});
+    g.append(t);
+    const hit=el("circle",{cx,cy,r:13,fill:"transparent"});
+    hit.addEventListener("mousemove",e=>showTip(
+      `<div class="t"><span class="dot" style="background:${col}"></span>${d.label}</div>`+
+      `<div class="r">AA Intelligence Index <b>${d.aa}</b> (reasoning on)</div>`+
+      `<div class="r">no-CoT 50% point <b>${d.x0.toFixed(2)}</b></div>`+
+      `<div class="r">lab <b>${d.family}</b></div>`,e.clientX,e.clientY));
+    hit.addEventListener("mouseleave",hideTip);g.append(hit);svg.append(g);
+  });
+}
+
+/* ---------- Chart 3: discard bars ---------- */
+function discard(){
+  const svg=document.getElementById("chart-disc");if(!svg)return;svg.textContent="";
+  const rows=[...DATA].sort((a,b)=>b.disc-a.disc);
+  const W=880,rh=20,padT=8,padB=30,padL=150,padR=20;
+  const H=padT+padB+rows.length*rh, dmax=40, X=v=>padL+v/dmax*(W-padL-padR);
+  for(let g=0;g<=40;g+=10){
+    svg.append(el("line",{x1:X(g),y1:padT,x2:X(g),y2:H-padB,stroke:css("--grid"),"stroke-width":1}));
+    svg.append(Object.assign(el("text",{x:X(g),y:H-padB+17,fill:css("--faint"),"font-size":10.5,
+      "text-anchor":"middle","font-family":"var(--mono)"}),{textContent:g+"%"}));
+  }
+  rows.forEach((d,i)=>{
+    const y=padT+i*rh,col=famColor(d.family),bw=Math.max(X(d.disc)-padL,1.5);
+    const g=el("g",{});
+    g.append(Object.assign(el("text",{x:padL-10,y:y+rh/2+3.5,fill:css("--ink"),"font-size":10.5,
+      "text-anchor":"end"}),{textContent:d.label}));
+    g.append(el("rect",{x:padL,y:y+3,width:bw,height:rh-8,rx:3,fill:col,opacity:.85}));
+    g.append(Object.assign(el("text",{x:padL+bw+7,y:y+rh/2+3.5,fill:css("--muted"),"font-size":10,
+      "font-family":"var(--mono)"}),{textContent:d.disc.toFixed(1)+"%"}));
+    const hit=el("rect",{x:0,y:y,width:W,height:rh,fill:"transparent"});
+    hit.addEventListener("mousemove",e=>showTip(tipHtml(d),e.clientX,e.clientY));
+    hit.addEventListener("mouseleave",hideTip);g.append(hit);svg.append(g);
+  });
+}
+
+function renderAll(){scatter();frontier();curves();legend();discard();}
+const _foot=document.getElementById("foot");
+if(_foot)_foot.innerHTML=
+  "method · adaptive per-cell sampling to Beta-posterior SD < 2% · reasoning disabled · "+
+  "greedy for open models, default temperature for API models · ~607k total samples<br>"+
+  "difficulty axis = 2·dₓ·dᵧ/(dₓ+dᵧ), the harmonic mean of the two operands' digit counts";
+renderAll();
+new MutationObserver(renderAll).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+matchMedia("(prefers-color-scheme:dark)").addEventListener("change",renderAll);
+addEventListener("resize",()=>{clearTimeout(window._rt);window._rt=setTimeout(renderAll,150);});
+</script>
+
+<style>
+html,body{background:#000 !important}
+.wrap{padding-top:2px !important;padding-bottom:6px !important;max-width:none !important}
+.eyebrow,.dek,footer{display:none !important}
+h1{display:none !important}
+.tiles{display:none !important}
+section>h2{color:#f2f2f2 !important}
+.sub{color:#bcbcbc !important}
+.note{color:#cacaca !important}
+.note b,.note i,.sub b,section>h2 b{color:#fff !important}
+.legend button{color:#cacaca !important}
+.legend button[aria-pressed="true"]{color:#fff !important}
+.legend .hint{color:#8a8a8a !important}
+</style>
+</body>
+</html>
