@@ -1,5 +1,5 @@
 ---
-title: Testing LLM "Mental Math"
+title: Testing LLM Mental Math
 date: 2026-07-28
 group: AI Research
 summary: LLMs can multiply large numbers without thinking, but the trend is mostly flat?
