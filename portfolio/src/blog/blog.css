@@ -274,6 +274,14 @@
   border-radius: 8px;
 }
 
+.post-content video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  background: #000;
+}
+
 /* Interactive graph embeds (self-contained pages in public/interactive/).
    Height is set at runtime by sizeEmbeds() in blog.ts. */
 .post-content iframe.graph-embed {

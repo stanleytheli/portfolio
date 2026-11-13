@@ -47,6 +47,15 @@ const postImages = import.meta.glob(
   { import: 'default', eager: true }
 ) as Record<string, string>;
 
+// Same for videos. A post embeds one with image syntax and a video extension,
+// e.g. ![](images/demo.mp4), and gets an inline player (as GitHub does).
+const postVideos = import.meta.glob('./posts/**/*.{mp4,webm,mov}', {
+  import: 'default',
+  eager: true,
+}) as Record<string, string>;
+
+const VIDEO_EXT = /\.(mp4|webm|mov)($|[?#])/i;
+
 /**
  * Resolve an image `src` written in a post to a usable URL.
  * - Absolute URLs, root-relative (`/foo.png` from public/), and data URIs pass
@@ -60,7 +69,7 @@ function resolveImageSrc(src: string): string {
   }
   const normalized = src.replace(/^\.\//, '').replace(/^\/+/, '');
   const key = `./posts/${normalized}`;
-  return postImages[key] ?? src;
+  return postImages[key] ?? postVideos[key] ?? src;
 }
 
 function slugFromPath(path: string): string {
@@ -104,6 +113,12 @@ marked.use({
     image({ href, title, text }) {
       const src = resolveImageSrc(href ?? '');
       const titleAttr = title ? ` title="${escapeHtml(title)}"` : '';
+      if (VIDEO_EXT.test(href ?? '')) {
+        // The #t fragment makes the browser paint the first frame as a preview;
+        // without it Safari shows a black box until the video is played.
+        const poster = src.includes('#') ? src : `${src}#t=0.001`;
+        return `<video src="${escapeHtml(poster)}" controls playsinline preload="metadata"${titleAttr}></video>`;
+      }
       return `<img src="${escapeHtml(src)}" alt="${escapeHtml(text ?? '')}"${titleAttr} loading="lazy">`;
     },
   },
