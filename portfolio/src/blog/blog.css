@@ -317,6 +317,32 @@
   border-radius: 8px;
 }
 
+/* Always-visible horizontal scrollbar: macOS hides overlay scrollbars by
+   default, which leaves mouse users with no way to scroll a wide table. */
+.post-content .table-wrap::-webkit-scrollbar {
+  height: 10px;
+}
+
+.post-content .table-wrap::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.post-content .table-wrap::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.28);
+  border-radius: 5px;
+}
+
+.post-content .table-wrap::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+/* Firefox (setting these in Chromium would switch off the rules above). */
+@supports not selector(::-webkit-scrollbar) {
+  .post-content .table-wrap {
+    scrollbar-color: rgba(255, 255, 255, 0.28) rgba(255, 255, 255, 0.04);
+  }
+}
+
 .post-content table {
   border-collapse: collapse;
   width: 100%;
